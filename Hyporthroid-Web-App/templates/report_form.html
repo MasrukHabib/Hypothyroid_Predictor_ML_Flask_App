@@ -1,0 +1,200 @@
+{# report_form.html #}
+
+{% extends 'base.html' %}
+
+{% block title %} Form {% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>Real time hypothyroid prediction</h3>
+        </div>
+        <div class="card-body text-center">
+            <p class="card-text">Provide your data using the form to check for hypothyroid.</p>
+        </div>
+
+        <hr class="mx-2">
+        <form id="multi-step-form" method="post" action="/result">
+            <fieldset class="step">
+                <div class="row m-3">
+                    <div class="col-md-3 mt-2">
+                        <label for="{{ age_sex[0].name }}">{{ age_sex[0].label }}</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" id="{{ age_sex[0].name }}" name="{{ age_sex[0].name }}"
+                               class="form-control"
+                               placeholder="Enter Your {{ age_sex[0].name }}" required>
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <label for="{{ age_sex[1].name }}">{{ age_sex[1].label }}</label>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="{{ age_sex[1].name }}" name="{{ age_sex[1].name }}" class="form-select mb-3"
+                                required>
+                            <option selected></option>
+                            <option value="0">{{ age_sex[1].choices[0][1] }}</option>
+                            <option value="1">{{ age_sex[1].choices[1][1] }}</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="mx-2">
+                <div class="row m-3">
+                    {% for field in step1_fields %}
+                        <div class="col-md-3 mt-2">
+                            <label for="{{ field.name }}">{{ field.label }}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select mb-3" name="{{ field.name }}" id="{{ field.name }}" required>
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-3 m-4">
+                    <button class="btn btn-primary next-step" type="button">Next</button>
+                </div>
+            </fieldset>
+
+            <!-- Add more fieldsets for additional steps -->
+            <fieldset class="step" style="display: none; width: 80%;">
+                <div class="row m-3">
+                    {% for field in step2_fields[0] %}
+                        <div class="col-md-3 mt-2">
+                            <label for="{{ field.name }}">{{ field.label }}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select mb-3" name="{{ field.name }}" id="{{ field.name }}" required>
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    {% endfor %}
+                    <hr class="mx-2">
+                    <legend>Measured values</legend>
+                    {% for field in step2_fields[1] %}
+                        {% if '_measured' in field.name %}
+                            <div class="col-md-3 mt-2 ">
+                                <label for="{{ field.name }}">{{ field.label }}</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                <select class="form-select mb-3" name="{{ field.name }}" id="{{ field.name }}" required>
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 mt-2 ">
+                                <label for="{{ field.name }}">{{ field.label }}</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" id="{{ field.name }}" name="{{ field.name }}" class="form-control"
+                                       placeholder="{{ field.name.upper() }}" required>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-md-3 m-4">
+                    <button class="btn btn-primary prev-step" type="button">Prev</button>
+                    <button class="btn btn-primary submit-btn" type="submit">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("multi-step-form");
+            const steps = form.querySelectorAll(".step");
+            let currentStep = 0;
+
+            function showStep(stepIndex) {
+                steps.forEach((step, index) => {
+                    if (index === stepIndex) {
+                        step.style.display = "block";
+                    } else {
+                        step.style.display = "none";
+                    }
+                });
+            }
+
+            function goToNextStep() {
+                if (currentStep < steps.length - 1) {
+                    const currentStepElement = steps[currentStep];
+                    const nextButton = currentStepElement.querySelector(".next-step");
+                    const isValid = validateForm(currentStepElement);
+
+                    if (isValid) {
+                        currentStep++;
+                        showStep(currentStep);
+                    } else {
+                        // Optionally handle invalid form data
+                    }
+                }
+            }
+
+            function goToPrevStep() {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            }
+
+            // Event listeners for Next and Prev buttons
+            document.querySelectorAll(".next-step").forEach(button => {
+                button.addEventListener("click", goToNextStep);
+            });
+
+            document.querySelectorAll(".prev-step").forEach(button => {
+                button.addEventListener("click", goToPrevStep);
+            });
+
+            // Event listeners for input/select elements to trigger validation
+            form.querySelectorAll("input, select").forEach(field => {
+                field.addEventListener("input", () => {
+                    const stepElement = field.closest(".step");
+                    validateForm(stepElement);
+                });
+            });
+
+            form.addEventListener("submit", function (event) {
+                const currentStepElement = steps[currentStep];
+                const isValid = validateForm(currentStepElement);
+
+                if (!isValid) {
+                    event.preventDefault(); // Prevent form submission if validation fails
+                }
+            });
+
+            function validateForm(stepElement) {
+                let isValid = true;
+
+                // Validate each field individually within the specified step
+                const requiredFields = stepElement.querySelectorAll("[required]");
+                requiredFields.forEach(function (field) {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        // Add error styling or message to the field
+                        field.classList.add("is-invalid");
+                    } else {
+                        // Remove error styling if the field is valid
+                        field.classList.remove("is-invalid");
+                    }
+                });
+
+                // Enable next button if all required fields in the current step are filled
+                const nextButton = stepElement.querySelector(".next-step");
+                nextButton.disabled = !isValid;
+
+                return isValid;
+            }
+
+            // Validate form initially
+            validateForm(steps[currentStep]);
+        });
+    </script>
+
+{% endblock %}

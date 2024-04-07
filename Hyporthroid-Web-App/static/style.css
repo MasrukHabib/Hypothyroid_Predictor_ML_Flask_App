@@ -1,0 +1,7 @@
+.is-invalid {
+  border: 1px solid red;
+}
+
+.email {
+  font-size: 10px;
+}

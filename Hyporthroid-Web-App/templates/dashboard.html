@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="mb-5">
+            <h2 class=" text-center display-4">Welcome to the Real-Time Hypothyroid Predictor</h2>
+            <p class="lead">Experience vitality with our state-of-the-art algorithm. While it provides valuable
+                insights, always remember to consult healthcare professionals for precise diagnosis and treatment.</p>
+        </div>
+
+        <div class="text-center mb-5">
+            <a href="{{ url_for('report') }}" class="btn btn-lg btn-primary">Get Predictions</a>
+        </div>
+
+        <div class="mb-5">
+            <h3 class="text-center">Meet Our Team</h3>
+            <p class="lead ">Meet the brilliant minds behind this innovative project. Our dedicated team has poured
+                their passion and expertise into bringing this web app to life.</p>
+        </div>
+
+        {# Image cards for team members #}
+        <div class="row">
+            {% for team_member in team_members %}
+                <div class="col-md-3">
+                    <div class="card border-0">
+                        <img src="{{ url_for('static', filename=team_member.img_src) }}"
+                             class="card-img-top rounded-circle img-fluid" alt="">
+                        {% if team_member.name == "Masruk Habib" %}
+                            <div class="card-body text-center mt-3">
+                                <h5 class="card-title">{{ team_member.name }}</h5>
+                                <p class="card-text">Department Of Computer Engineering, Marwadi University</p>
+                                <h6 class="small">Email: <span class="text-secondary">{{ team_member.email }}</span>
+                                </h6>
+                            </div>
+                        {% else %}
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ team_member.name }}</h5>
+                                <p class="card-text">Department Of Computer Engineering, Marwadi University</p>
+                                <h6 class="small">Email: <span class="text-secondary">{{ team_member.email }}</span>
+                                </h6>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
