@@ -6,7 +6,7 @@ website link: https://hyporthroid-web-app.onrender.com
 
 - [Masruk Habib ](https://www.linkedin.com/in/masruk-habib) -Team Leader
 - [PUVANENTHIRARAJAH SATHASIVAM](https://www.linkedin.com/in/puvanenthirarajah-sathasivam-958014266) 
-- [David Brown](https://github.com/davidbrown) - DevOps engineer, managed deployment and CI/CD pipelines.
+- [Wasihun Ageru](https://github.com/wasihun-code)
 
 ## Mentor 
 - [Ravikumar R Natarajan ](https://www.linkedin.com/in/ravikumarrn/)
