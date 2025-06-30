@@ -2,18 +2,18 @@
 
 This Flask web application is designed to accurately predict the likelihood of Hypothyroid disease by analyzing specific patient data with advanced machine learning techniques. With high accuracy achieved through optimized hyperparameter tuning, it features a simple, user-friendly interface that enables healthcare professionals to enter patient details and receive reliable predictions. Built for clinical settings, this tool supports early diagnosis and informed decision-making, helping improve patient care with trustworthy, data-driven insights.
 
-## 🌟 Key Features
+##  Key Features
 
-- **🔍 Automated Prediction**  
+- **Automated Prediction**  
    Leverages advanced machine learning classifiers to deliver accurate predictions on Hypothyroid disease, empowering healthcare professionals with data-driven insights.
 
-- **🎯 Hyperparameter Tuning for Accuracy**  
+- **Hyperparameter Tuning for Accuracy**  
    Boosts model precision with optimization techniques like **Grid Search** and **Random Search**, ensuring reliable and robust prediction results.
 
-- **🌐 User-Centric Interface**  
+- **User-Centric Interface**  
    Built with Flask, the application provides a seamless, intuitive interface, making it easy for users to input patient data and receive instant predictions.
 
-- **⚙️ Flexible Model Integration**  
+- **Flexible Model Integration**  
    Supports a variety of machine learning algorithms, including **Random Forest**, **Support Vector Machine (SVM)**, and **Neural Networks**, offering adaptability and options for different prediction needs.
 
 ## Technologies Used
